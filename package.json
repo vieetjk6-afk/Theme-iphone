@@ -1,0 +1,16 @@
+{
+  "name": "theme-iphone-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tự thiết kế bộ icon, hình nền và profile cài theme cho iPhone ngay trên trình duyệt (không cần jailbreak).",
+  "license": "MIT",
+  "scripts": {
+    "start": "http-server . -p 8080 -c-1",
+    "glyphs": "node scripts/build-glyphs.mjs"
+  },
+  "devDependencies": {
+    "http-server": "14.1.1",
+    "lucide-static": "1.55.0",
+    "simple-icons": "16.35.0"
+  }
+}
