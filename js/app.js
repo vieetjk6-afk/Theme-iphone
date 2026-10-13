@@ -45,7 +45,17 @@
     }
   }
 
+  // Trên iPhone, Safari cho biết độ phân giải màn hình -> tự chọn đúng đời máy.
+  function detectDevice() {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.round(Math.min(screen.width, screen.height) * dpr);
+    const h = Math.round(Math.max(screen.width, screen.height) * dpr);
+    const id = `${w}x${h}`;
+    return TIS.DEVICES.some((d) => d.id === id) ? id : null;
+  }
+
   let state = load();
+  if (!state.deviceChosen) state.device = detectDevice() || state.device;
 
   function save() {
     try {
@@ -156,6 +166,7 @@
     save();
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(renderPreview);
+    schedulePrerender();
   }
 
   // ---------- Điều khiển ----------
@@ -373,6 +384,7 @@
     });
     $('device').addEventListener('change', (e) => {
       state.device = e.target.value;
+      state.deviceChosen = true;
       update();
     });
     $('shuffle').addEventListener('click', () => {
@@ -422,7 +434,7 @@
   async function run(fn) {
     if (busy) return;
     busy = true;
-    document.querySelectorAll('.export-buttons button').forEach((b) => (b.disabled = true));
+    document.querySelectorAll('[data-export]').forEach((b) => (b.disabled = true));
     try {
       await fn();
     } catch (err) {
@@ -430,7 +442,7 @@
       status('Có lỗi: ' + (err && err.message ? err.message : err), 'err');
     } finally {
       busy = false;
-      document.querySelectorAll('.export-buttons button').forEach((b) => (b.disabled = false));
+      document.querySelectorAll('[data-export]').forEach((b) => (b.disabled = false));
     }
   }
 
@@ -494,33 +506,74 @@
     status(`Đã tạo profile gồm ${res.count} icon.`, 'ok');
     showResult(
       'profile',
-      `<h3>Bộ icon đã sẵn sàng</h3>
-       <p>Trên iPhone: chọn <b>Cho phép</b>, rồi vào <b>Cài đặt › Đã tải về hồ sơ › Cài đặt</b>.
-       Trên máy tính: gửi file <code>${fileBase()}.mobileconfig</code> sang iPhone (AirDrop hoặc gửi mail cho chính mình) rồi mở.</p>` +
+      `<h3>Bộ icon đã tải về</h3>
+       <ol class="mini-steps">
+         <li>Chọn <b>Cho phép</b> khi Safari hỏi.</li>
+         <li>Mở app <b>Cài đặt</b>, bấm dòng <b>Đã tải về hồ sơ</b> ở trên cùng.</li>
+         <li>Bấm <b>Cài đặt</b>, nhập mật mã máy, bấm <b>Cài đặt</b> lần nữa. Làm trong vài phút, để lâu hồ sơ sẽ tự xóa.</li>
+       </ol>
+       <p class="sub">Đang dùng máy tính? Gửi file <code>${fileBase()}.mobileconfig</code> sang iPhone bằng AirDrop hoặc Mail rồi mở.</p>` +
         (shortcutOnly.length
-          ? `<p>Các app sau cần gắn bằng app Phím tắt: <b>${shortcutOnly.map((a) => R.esc(a.label)).join(', ')}</b>.
-             Bấm <b>Lấy icon cho Phím tắt</b> để lưu icon của chúng.</p>`
+          ? `<p class="sub">${shortcutOnly.map((a) => R.esc(a.label)).join(', ')} không cài bằng profile được.
+             Muốn đổi icon của chúng, xem <b>Tùy chỉnh thêm › Lấy icon cho Phím tắt</b>.</p>`
           : '')
     );
   }
 
-  async function wallpaperBlob() {
+  async function renderWallpaper() {
     const [W, H] = state.device.split('x').map(Number);
-    status('Đang vẽ hình nền…');
     const canvas = await R.rasterize(R.wallpaperSVG(state.wallpaper, W, H, state.seed), W, H);
     // JPEG chất lượng cao: nhẹ hơn PNG hàng chục lần với nền có hạt nhiễu, mắt thường không thấy khác.
     return R.canvasToBlob(canvas, 'image/jpeg', 0.92);
   }
 
+  async function wallpaperBlob() {
+    status('Đang vẽ hình nền…');
+    return renderWallpaper();
+  }
+
+  // Trên iPhone: vẽ sẵn hình nền khi đổi theme, để bấm nút là mở ngay bảng Chia sẻ (có "Lưu hình ảnh").
+  // Safari chỉ cho mở bảng Chia sẻ ngay lúc bấm, nên không thể đợi vẽ xong mới gọi.
+  const canShareFiles = (() => {
+    try {
+      return !!(navigator.canShare && navigator.canShare({ files: [new File([''], 'a.jpg', { type: 'image/jpeg' })] }));
+    } catch (e) {
+      return false;
+    }
+  })();
+  let wallCache = { key: '', file: null };
+  let prerenderTimer = 0;
+  const wallKey = () => JSON.stringify([state.wallpaper, state.device, state.seed]);
+
+  function schedulePrerender() {
+    if (!canShareFiles) return;
+    clearTimeout(prerenderTimer);
+    prerenderTimer = setTimeout(async () => {
+      const key = wallKey();
+      if (wallCache.key === key) return;
+      try {
+        const blob = await renderWallpaper();
+        if (key === wallKey()) wallCache = { key, file: new File([blob], `hinh-nen-${fileBase()}.jpg`, { type: 'image/jpeg' }) };
+      } catch (e) {
+        /* bấm nút vẫn vẽ lại được */
+      }
+    }, 800);
+  }
+
   async function exportWallpaper() {
-    const blob = await wallpaperBlob();
+    const cached = wallCache.key === wallKey() ? wallCache.file : null;
+    if (cached) navigator.share({ files: [cached] }).catch(() => {});
+    const blob = cached || (await wallpaperBlob());
     const url = URL.createObjectURL(blob);
     const name = `hinh-nen-${fileBase()}.jpg`;
     status('Hình nền đã sẵn sàng.', 'ok');
     showResult(
       'wall',
-      `<h3>Hình nền (${state.device.replace('x', '×')})</h3>
-       <p>Trên iPhone: <b>nhấn giữ ảnh › Lưu vào Ảnh</b>, rồi vào <b>Cài đặt › Hình nền</b>.</p>
+      `<h3>Hình nền</h3>
+       <ol class="mini-steps">
+         <li>${cached ? 'Chọn <b>Lưu hình ảnh</b> trong bảng Chia sẻ, hoặc nhấn giữ ảnh dưới đây và chọn <b>Lưu vào Ảnh</b>.' : 'Nhấn giữ ảnh dưới đây, chọn <b>Lưu vào Ảnh</b>.'}</li>
+         <li>Vào <b>Cài đặt › Hình nền › Thêm hình nền mới › Ảnh</b>, chọn ảnh vừa lưu, bấm <b>Thêm</b>.</li>
+       </ol>
        <img class="wall-out" src="${url}" alt="Hình nền theme">
        <p><a class="btn small" href="${url}" download="${name}">Tải ảnh về</a></p>`,
       [url]
@@ -603,4 +656,5 @@
   syncControls();
   checkBrowser();
   renderPreview();
+  schedulePrerender();
 })();

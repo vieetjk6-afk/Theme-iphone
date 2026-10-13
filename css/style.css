@@ -74,14 +74,75 @@ code { font: 0.9em ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; ove
 }
 
 @media (min-width: 900px) {
-  .layout { grid-template-columns: 340px 1fr; align-items: start; gap: 28px; }
-  .preview-col { position: sticky; top: 16px; }
+  .layout { grid-template-columns: 360px 1fr; align-items: start; gap: 28px; }
 }
+
+/* ---------- Cài nhanh ---------- */
+.quick-col {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  min-width: 0;
+}
+.quick-title { margin: 0 0 12px; font-size: 18px; }
+.quick-col .chips { justify-content: center; }
+.quick-actions { display: grid; gap: 10px; margin-top: 18px; }
+.btn.big { padding: 15px 18px; font-size: 17px; border-radius: 14px; }
+.quick-hint { text-align: left; margin-top: 14px; line-height: 1.5; }
+.mini-steps { margin: 6px 0; padding-left: 20px; font-size: 14px; }
+.mini-steps li { margin: 4px 0; }
+
+/* Điện thoại: theme cuộn ngang một hàng, hai nút luôn nằm ở đáy màn hình. */
+@media (max-width: 899px) {
+  .quick-col .chips {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    margin: 0 -18px 14px;
+    padding: 2px 18px 6px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .quick-col .chips::-webkit-scrollbar { display: none; }
+  .quick-col .chip { flex: none; }
+  .quick-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 5;
+    grid-template-columns: 1fr 1fr;
+    margin: 18px -18px 0;
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+    background: var(--card);
+    border-top: 1px solid var(--line);
+  }
+  .btn.big { font-size: 15px; padding: 13px 8px; }
+}
+
+.side-col { display: grid; gap: 16px; min-width: 0; }
+.fold {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.fold > summary {
+  cursor: pointer;
+  padding: 16px 18px;
+  font-weight: 600;
+  font-size: 17px;
+  list-style-position: inside;
+}
+.fold > summary span { color: var(--muted); font-weight: 400; font-size: 15px; }
+.fold-body { display: grid; gap: 16px; padding: 0 12px 12px; }
+.fold-body .card { border-color: var(--line); background: var(--bg); }
+.fold-body.guide { padding: 0 18px 18px; }
+.steps-title { margin: 8px 0 0; font-size: 17px; }
+.field.first { margin: 0 0 14px; }
 
 /* ---------- Khung iPhone ---------- */
 .phone {
   position: relative;
-  width: min(300px, 78vw);
+  width: min(280px, 68vw);
   aspect-ratio: 1206 / 2622;
   margin: 0 auto;
   border-radius: 46px;

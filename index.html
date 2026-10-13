@@ -13,7 +13,7 @@
   <header class="top">
     <div class="wrap">
       <h1>Theme iPhone Studio</h1>
-      <p class="lead">Tự thiết kế bộ icon và hình nền rồi cài lên iPhone. Không cần jailbreak, không cần cài app.</p>
+      <p class="lead">Chọn theme, bấm 2 nút là xong. Không cần jailbreak, không cần cài app.</p>
       <p id="browserWarn" class="warn" hidden>
         Bạn đang mở trang bằng trình duyệt khác Safari. Để cài được bộ icon, hãy mở lại trang này bằng <b>Safari</b>.
       </p>
@@ -21,30 +21,36 @@
   </header>
 
   <main class="wrap layout">
-    <!-- Khung xem trước -->
-    <section class="preview-col" aria-label="Xem trước">
+    <!-- Cài nhanh: chọn theme, xem trước, bấm 2 nút -->
+    <section class="quick-col" aria-label="Cài nhanh">
+      <h2 class="quick-title">Chọn theme</h2>
+      <div class="chips" id="presetChips"></div>
       <div class="phone" id="phone">
         <img class="wall" id="wallPreview" alt="">
         <div class="status"><span>9:41</span><span class="island"></span><span class="bars">●●● ▲ ▮</span></div>
         <div class="grid" id="homeGrid"></div>
         <div class="dock" id="dock"></div>
       </div>
-      <p class="hint">Xem trước gần đúng. Trên máy thật, iOS tự bo góc icon.</p>
+      <div class="quick-actions">
+        <button type="button" class="btn primary big" id="btnWall" data-export>1. Lưu hình nền</button>
+        <button type="button" class="btn primary big" id="btnProfile" data-export>2. Cài bộ icon</button>
+      </div>
+      <p class="status-msg" id="status" role="status" aria-live="polite"></p>
+      <div id="results"></div>
+      <p class="hint quick-hint">Không muốn cài bộ icon? Chỉ làm bước 1, rồi nhấn giữ màn hình chính, chọn
+        <b>Sửa › Tùy chỉnh › Trong suốt › Tối</b> (iOS 26). Icon gốc thành kính mờ và vẫn giữ số thông báo.</p>
     </section>
 
-    <!-- Bảng điều khiển -->
-    <section class="controls-col">
+    <section class="side-col">
+      <details class="fold" id="advanced">
+        <summary>Tùy chỉnh thêm <span>(không bắt buộc)</span></summary>
+        <div class="fold-body">
       <div class="card">
-        <h2><span class="num">1</span> Chọn mẫu</h2>
-        <div class="chips" id="presetChips"></div>
-        <label class="field">
-          <span>Tên theme</span>
+        <h2>Icon</h2>
+        <label class="field first">
+          <span>Tên theme (hiện trong Cài đặt)</span>
           <input type="text" id="themeName" maxlength="40" autocomplete="off">
         </label>
-      </div>
-
-      <div class="card">
-        <h2><span class="num">2</span> Icon</h2>
         <div class="seg" id="iconStyle" role="radiogroup" aria-label="Kiểu icon">
           <button type="button" data-v="gradient">Chuyển màu</button>
           <button type="button" data-v="solid">Một màu</button>
@@ -72,7 +78,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="num">3</span> Hình nền</h2>
+        <h2>Hình nền</h2>
         <div class="seg" id="wallStyle" role="radiogroup" aria-label="Kiểu hình nền">
           <button type="button" data-v="blobs">Mảng màu</button>
           <button type="button" data-v="gradient">Chuyển màu</button>
@@ -92,7 +98,7 @@
           <input type="text" id="wallText" maxlength="20" autocomplete="off" placeholder="VD: MINIMAL">
         </label>
         <label class="field">
-          <span>Đời máy (để hình nền đúng nét)</span>
+          <span>Đời máy (trang tự nhận ra khi mở trên iPhone)</span>
           <select id="device"></select>
         </label>
         <label class="check">
@@ -102,7 +108,7 @@
       </div>
 
       <div class="card">
-        <h2><span class="num">4</span> Chọn app</h2>
+        <h2>Chọn app</h2>
         <p class="sub">Sửa tên hiển thị ngay trong ô. Nhãn <b class="tag test">Cần thử</b> là app có đường dẫn ít tài liệu, nên bấm thử sau khi cài.
           Nhãn <b class="tag sc">Phím tắt</b> là app không mở được bằng profile, phải gắn icon qua app Phím tắt (có hướng dẫn bên dưới).</p>
         <div class="row-actions">
@@ -125,80 +131,81 @@
         </details>
       </div>
 
-      <div class="card export">
-        <h2><span class="num">5</span> Xuất &amp; cài lên iPhone</h2>
-        <div class="export-buttons">
-          <button type="button" class="btn primary" id="btnProfile">Cài bộ icon (.mobileconfig)</button>
-          <button type="button" class="btn" id="btnWall">Lấy hình nền</button>
-          <button type="button" class="btn" id="btnIcons">Lấy icon cho Phím tắt</button>
-          <button type="button" class="btn ghost" id="btnZip">Tải trọn bộ (.zip)</button>
+          <div class="card">
+            <h2>Xuất thêm</h2>
+            <div class="export-buttons">
+              <button type="button" class="btn" id="btnIcons" data-export>Lấy icon cho Phím tắt</button>
+              <button type="button" class="btn ghost" id="btnZip" data-export>Tải trọn bộ (.zip)</button>
+            </div>
+          </div>
         </div>
-        <p class="status-msg" id="status" role="status" aria-live="polite"></p>
-        <div id="results"></div>
+      </details>
+
+      <details class="fold" id="guide">
+        <summary>Hướng dẫn chi tiết &amp; xử lý sự cố</summary>
+        <div class="fold-body guide">
+      <div class="note">
+        <h2>Cần biết trước</h2>
+        <ul>
+          <li>Icon tự tạo <b>không hiện số thông báo đỏ</b>. Đây là giới hạn của iOS, áp dụng cho mọi cách đổi icon không cần jailbreak.</li>
+          <li>Icon mở app bằng URL scheme. Apple không công bố danh sách đầy đủ và các app có thể đổi scheme. Hãy bấm thử từng icon.
+            App nào không mở được thì sửa scheme trong danh sách, hoặc gắn icon cho app đó bằng app Phím tắt.</li>
+          <li>Icon gốc của app vẫn còn. Bạn tự giấu chúng vào Thư viện ứng dụng (bước 5).</li>
+          <li>Không đổi được phông chữ hệ thống, Trung tâm điều khiển hay âm thanh. Những thứ đó cần jailbreak.</li>
+        </ul>
       </div>
+      <div class="note tip">
+        <h2>Mẹo: theme tối giản mà vẫn giữ số thông báo</h2>
+        <p>Muốn kiểu đen trắng như mẫu <b>Sương Đen</b> / <b>Than Chì</b> mà không cần cài bộ icon:</p>
+        <ul>
+          <li>Đặt hình nền của theme (bước 1).</li>
+          <li><b>iOS 26 trở lên:</b> nhấn giữ màn hình chính, chọn <b>Sửa › Tùy chỉnh</b>, chọn <b>Trong suốt</b> (bản tiếng Anh: <i>Clear</i>), rồi chọn <b>Tối</b>.
+            Mọi icon và widget gốc sẽ thành kính mờ.</li>
+          <li><b>iOS 18:</b> làm như trên nhưng chọn <b>Phủ màu</b> (<i>Tinted</i>), kéo thanh màu về xám để icon thành đen trắng.</li>
+        </ul>
+        <p>Cách này giữ nguyên icon gốc nên vẫn có số thông báo đỏ. Bộ icon tự tạo phù hợp khi bạn muốn biểu tượng và tên app theo ý mình.</p>
+      </div>
+      <h3 class="steps-title">Từng bước</h3>
+      <ol class="steps">
+        <li>
+          <h3>Đặt hình nền</h3>
+          <p>Bấm <b>1. Lưu hình nền</b>, chọn <b>Lưu hình ảnh</b> (hoặc nhấn giữ ảnh, chọn <b>Lưu vào Ảnh</b>). Sau đó vào <b>Cài đặt › Hình nền › Thêm hình nền mới</b> và chọn ảnh đó.
+            Nếu iOS hỏi, tắt hiệu ứng làm mờ màn hình chính để hình nền hiện rõ.</p>
+        </li>
+        <li>
+          <h3>Cài bộ icon</h3>
+          <p>Mở trang này bằng <b>Safari</b> trên iPhone, bấm <b>2. Cài bộ icon</b>, chọn <b>Cho phép</b> khi Safari hỏi tải hồ sơ cấu hình.</p>
+          <p>Vào <b>Cài đặt</b>. Ngay dưới tên Apple ID sẽ có dòng <b>Đã tải về hồ sơ</b>. Bấm vào, chọn <b>Cài đặt</b>, nhập mật mã máy, rồi bấm <b>Cài đặt</b> lần nữa.
+            Nếu không thấy dòng đó, vào <b>Cài đặt chung › VPN &amp; Quản lý thiết bị</b>. Hồ sơ đã tải sẽ tự xóa nếu sau khoảng 8 phút chưa cài.</p>
+          <p class="sub">iOS sẽ ghi “Chưa xác minh” vì profile không có chữ ký số. Đây là profile bạn tự tạo, chỉ chứa icon, không có quyền gì khác trên máy.</p>
+          <p class="sub">Tải file trên máy tính thì gửi sang iPhone bằng AirDrop hoặc gửi mail cho chính mình, rồi mở bằng app Mail. Sau đó làm tiếp như trên.</p>
+        </li>
+        <li>
+          <h3>Thêm widget Lịch, Đồng hồ</h3>
+          <p>Nhấn giữ màn hình chính, chọn <b>Sửa › Thêm tiện ích</b>. Tìm <b>Lịch</b> hoặc <b>Đồng hồ</b>, chọn cỡ vuông nhỏ, rồi bấm <b>Thêm tiện ích</b> và kéo lên hàng đầu.
+            Widget hợp theme tối hơn khi bật <b>Cài đặt › Màn hình &amp; Độ sáng › Tối</b>.</p>
+        </li>
+        <li>
+          <h3>Gắn icon cho app không có đường dẫn (Camera, Máy tính…)</h3>
+          <p>Mở <b>Tùy chỉnh thêm</b>, bấm <b>Lấy icon cho Phím tắt</b>, nhấn giữ icon cần dùng, chọn <b>Lưu vào Ảnh</b>. Sau đó:</p>
+          <p>Mở app <b>Phím tắt</b>, bấm <b>+</b>, chọn <b>Thêm tác vụ</b>, tìm <b>Mở ứng dụng</b> và chọn app. Bấm vào tên phím tắt ở trên cùng, chọn <b>Thêm vào MH chính</b>.
+            Bấm vào icon nhỏ, chọn <b>Chọn ảnh</b>, lấy icon vừa lưu, đặt tên rồi bấm <b>Thêm</b>.</p>
+        </li>
+        <li>
+          <h3>Giấu icon gốc</h3>
+          <p>Nhấn giữ icon gốc, chọn <b>Xóa ứng dụng › Xóa khỏi MH chính</b>. App vẫn còn trong Thư viện ứng dụng, không mất dữ liệu.
+            Muốn ẩn hết tên dưới icon trên iOS 18 trở lên: nhấn giữ màn hình, chọn <b>Sửa › Tùy chỉnh › Lớn</b>.</p>
+        </li>
+        <li>
+          <h3>Gỡ theme</h3>
+          <p>Vào <b>Cài đặt › Cài đặt chung › VPN &amp; Quản lý thiết bị</b>, chọn profile <b>Theme: …</b>, bấm <b>Xóa hồ sơ</b>. Toàn bộ icon của theme sẽ biến mất.
+            Cài lại một theme cùng tên sẽ thay bản cũ. Nếu bị trùng icon, gỡ bản cũ trước rồi cài lại.</p>
+        </li>
+      </ol>
+        </div>
+      </details>
     </section>
   </main>
-
-  <section class="wrap guide" id="guide">
-    <div class="note">
-      <h2>Cần biết trước</h2>
-      <ul>
-        <li>Icon tự tạo <b>không hiện số thông báo đỏ</b>. Đây là giới hạn của iOS, áp dụng cho mọi cách đổi icon không cần jailbreak.</li>
-        <li>Icon mở app bằng URL scheme. Apple không công bố danh sách đầy đủ và các app có thể đổi scheme. Hãy bấm thử từng icon.
-          App nào không mở được thì sửa scheme trong danh sách, hoặc gắn icon cho app đó bằng app Phím tắt.</li>
-        <li>Icon gốc của app vẫn còn. Bạn tự giấu chúng vào Thư viện ứng dụng (bước 5).</li>
-        <li>Không đổi được phông chữ hệ thống, Trung tâm điều khiển hay âm thanh. Những thứ đó cần jailbreak.</li>
-      </ul>
-    </div>
-    <div class="note tip">
-      <h2>Mẹo: theme tối giản mà vẫn giữ số thông báo</h2>
-      <p>Muốn kiểu đen trắng như mẫu <b>Sương Đen</b> / <b>Than Chì</b> mà không cần cài bộ icon:</p>
-      <ul>
-        <li>Đặt hình nền của theme (bước 2).</li>
-        <li><b>iOS 26 trở lên:</b> nhấn giữ màn hình chính, chọn <b>Sửa › Tùy chỉnh</b>, chọn <b>Trong suốt</b> (bản tiếng Anh: <i>Clear</i>), rồi chọn <b>Tối</b>.
-          Mọi icon và widget gốc sẽ thành kính mờ.</li>
-        <li><b>iOS 18:</b> làm như trên nhưng chọn <b>Phủ màu</b> (<i>Tinted</i>), kéo thanh màu về xám để icon thành đen trắng.</li>
-      </ul>
-      <p>Cách này giữ nguyên icon gốc nên vẫn có số thông báo đỏ. Bộ icon tự tạo phù hợp khi bạn muốn biểu tượng và tên app theo ý mình.</p>
-    </div>
-    <h2>Hướng dẫn cài từng bước</h2>
-    <ol class="steps">
-      <li>
-        <h3>Cài bộ icon</h3>
-        <p>Mở trang này bằng <b>Safari</b> trên iPhone, bấm <b>Cài bộ icon</b>, chọn <b>Cho phép</b> khi Safari hỏi tải hồ sơ cấu hình.</p>
-        <p>Vào <b>Cài đặt</b>. Ngay dưới tên Apple ID sẽ có dòng <b>Đã tải về hồ sơ</b>. Bấm vào, chọn <b>Cài đặt</b>, nhập mật mã máy, rồi bấm <b>Cài đặt</b> lần nữa.
-          Nếu không thấy dòng đó, vào <b>Cài đặt chung › VPN &amp; Quản lý thiết bị</b>. Hồ sơ đã tải sẽ tự xóa nếu sau khoảng 8 phút chưa cài.</p>
-        <p class="sub">iOS sẽ ghi “Chưa xác minh” vì profile không có chữ ký số. Đây là profile bạn tự tạo, chỉ chứa icon, không có quyền gì khác trên máy.</p>
-        <p class="sub">Tải file trên máy tính thì gửi sang iPhone bằng AirDrop hoặc gửi mail cho chính mình, rồi mở bằng app Mail. Sau đó làm tiếp như trên.</p>
-      </li>
-      <li>
-        <h3>Đặt hình nền</h3>
-        <p>Bấm <b>Lấy hình nền</b>, nhấn giữ ảnh, chọn <b>Lưu vào Ảnh</b>. Sau đó vào <b>Cài đặt › Hình nền › Thêm hình nền mới</b> và chọn ảnh đó.
-          Nếu iOS hỏi, tắt hiệu ứng làm mờ màn hình chính để hình nền hiện rõ.</p>
-      </li>
-      <li>
-        <h3>Thêm widget Lịch, Đồng hồ</h3>
-        <p>Nhấn giữ màn hình chính, chọn <b>Sửa › Thêm tiện ích</b>. Tìm <b>Lịch</b> hoặc <b>Đồng hồ</b>, chọn cỡ vuông nhỏ, rồi bấm <b>Thêm tiện ích</b> và kéo lên hàng đầu.
-          Widget hợp theme tối hơn khi bật <b>Cài đặt › Màn hình &amp; Độ sáng › Tối</b>.</p>
-      </li>
-      <li>
-        <h3>Gắn icon cho app không có đường dẫn (Camera, Máy tính…)</h3>
-        <p>Bấm <b>Lấy icon cho Phím tắt</b>, nhấn giữ icon cần dùng, chọn <b>Lưu vào Ảnh</b>. Sau đó:</p>
-        <p>Mở app <b>Phím tắt</b>, bấm <b>+</b>, chọn <b>Thêm tác vụ</b>, tìm <b>Mở ứng dụng</b> và chọn app. Bấm vào tên phím tắt ở trên cùng, chọn <b>Thêm vào MH chính</b>.
-          Bấm vào icon nhỏ, chọn <b>Chọn ảnh</b>, lấy icon vừa lưu, đặt tên rồi bấm <b>Thêm</b>.</p>
-      </li>
-      <li>
-        <h3>Giấu icon gốc</h3>
-        <p>Nhấn giữ icon gốc, chọn <b>Xóa ứng dụng › Xóa khỏi MH chính</b>. App vẫn còn trong Thư viện ứng dụng, không mất dữ liệu.
-          Muốn ẩn hết tên dưới icon trên iOS 18 trở lên: nhấn giữ màn hình, chọn <b>Sửa › Tùy chỉnh › Lớn</b>.</p>
-      </li>
-      <li>
-        <h3>Gỡ theme</h3>
-        <p>Vào <b>Cài đặt › Cài đặt chung › VPN &amp; Quản lý thiết bị</b>, chọn profile <b>Theme: …</b>, bấm <b>Xóa hồ sơ</b>. Toàn bộ icon của theme sẽ biến mất.
-          Cài lại một theme cùng tên sẽ thay bản cũ. Nếu bị trùng icon, gỡ bản cũ trước rồi cài lại.</p>
-      </li>
-    </ol>
-  </section>
 
   <footer class="wrap foot">
     <p>Mọi thứ được tạo ngay trên trình duyệt của bạn, không gửi dữ liệu đi đâu cả.

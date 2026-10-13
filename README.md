@@ -15,7 +15,7 @@ Chạy ngay trên trình duyệt. **Không cần jailbreak, không cần Mac, kh
 | **Than Chì** | Icon kính đen bóng, nền chuyển từ đen sang xám sáng | [hinh-nen-than-chi.jpg](themes/hinh-nen-than-chi.jpg) |
 | **Mực Đen** | Icon kính đen, nền than chì có vệt mực và chữ MINIMAL | [hinh-nen-muc-den.jpg](themes/hinh-nen-muc-den.jpg) |
 
-Cả ba đều có trong Studio, ở mục **Chọn mẫu**. Chọn mẫu, chỉnh tùy ý, rồi bấm **Cài bộ icon**.
+Cả ba đều có trong Studio, ở mục **Chọn theme**. Chọn theme rồi bấm **1. Lưu hình nền** và **2. Cài bộ icon**. Không cần chỉnh gì thêm.
 
 **Mẹo: giữ được số thông báo đỏ.** Không muốn cài bộ icon thì chỉ cần đặt hình nền ở trên, rồi bật chế độ icon có sẵn của iOS:
 
@@ -56,14 +56,14 @@ Repo này đi theo hướng **không jailbreak**. Một theme gồm 3 phần:
 1. Vào repo trên GitHub, chọn **Settings › Pages**.
 2. Ở mục *Build and deployment*: **Source** chọn **Deploy from a branch**. **Branch** chọn nhánh chứa code (ví dụ `main`) và thư mục **/ (root)**, rồi bấm **Save**.
 3. Đợi 1–2 phút. Trang sẽ có ở `https://vieetjk6-afk.github.io/Theme-iphone/`.
-4. Mở link đó bằng **Safari trên iPhone**, thiết kế theme, rồi bấm **Cài bộ icon**.
+4. Mở link đó bằng **Safari trên iPhone**, chọn theme, rồi bấm **1. Lưu hình nền** và **2. Cài bộ icon**.
 
 Repo đang để công khai nên GitHub Pages miễn phí. Trang không lưu hay gửi dữ liệu của bạn đi đâu: mọi thứ được vẽ ngay trên điện thoại.
 
 ### Cách 2: Chạy trên máy tính
 
 **Không cài gì cả:** tải repo về (**Code › Download ZIP**), giải nén, rồi **nhấp đúp `index.html`**.
-Thiết kế xong, bấm **Tải trọn bộ (.zip)**. Sau đó gửi file `.mobileconfig` sang iPhone bằng AirDrop, hoặc gửi mail cho chính mình rồi mở bằng app **Mail**.
+Chọn theme, mở **Tùy chỉnh thêm** và bấm **Tải trọn bộ (.zip)**. Sau đó gửi file `.mobileconfig` sang iPhone bằng AirDrop, hoặc gửi mail cho chính mình rồi mở bằng app **Mail**.
 
 **Mở từ iPhone qua Wi‑Fi nhà** (máy tính cần cài [Node.js](https://nodejs.org)):
 
@@ -76,11 +76,13 @@ Lệnh `npm start` sẽ in ra địa chỉ dạng `http://192.168.x.x:8080`. Tr�
 
 ## Cài theme lên iPhone
 
-1. **Bộ icon.** Bấm **Cài bộ icon**, rồi chọn **Cho phép** khi Safari hỏi. Vào **Cài đặt**, bấm dòng **Đã tải về hồ sơ** ngay dưới tên Apple ID, rồi chọn **Cài đặt**.
-   Không thấy dòng đó thì vào **Cài đặt chung › VPN & Quản lý thiết bị**.
-2. **Hình nền.** Bấm **Lấy hình nền**, nhấn giữ ảnh và chọn **Lưu vào Ảnh**. Sau đó vào **Cài đặt › Hình nền › Thêm hình nền mới**.
+Trang tự nhận ra đời iPhone của bạn. Các phần chỉnh màu, chọn app… nằm trong **Tùy chỉnh thêm** và không bắt buộc.
+
+1. **Hình nền.** Bấm **1. Lưu hình nền**, rồi chọn **Lưu hình ảnh** (hoặc nhấn giữ ảnh và chọn **Lưu vào Ảnh**). Sau đó vào **Cài đặt › Hình nền › Thêm hình nền mới**.
    Muốn có widget Lịch và Đồng hồ như ảnh mẫu: nhấn giữ màn hình chính, chọn **Sửa › Thêm tiện ích**.
-3. **App không có scheme** (nhãn *Phím tắt*). Bấm **Lấy icon cho Phím tắt** và lưu icon vào Ảnh.
+2. **Bộ icon.** Bấm **2. Cài bộ icon**, rồi chọn **Cho phép** khi Safari hỏi. Vào **Cài đặt**, bấm dòng **Đã tải về hồ sơ** ngay dưới tên Apple ID, rồi chọn **Cài đặt**.
+   Không thấy dòng đó thì vào **Cài đặt chung › VPN & Quản lý thiết bị**.
+3. **App không có scheme** (nhãn *Phím tắt*). Mở **Tùy chỉnh thêm**, bấm **Lấy icon cho Phím tắt** và lưu icon vào Ảnh.
    Mở app **Phím tắt**, bấm **+ › Thêm tác vụ › Mở ứng dụng** rồi chọn app. Bấm tên phím tắt và chọn **Thêm vào MH chính**. Bấm vào icon, chọn **Chọn ảnh** và lấy icon vừa lưu.
 4. **Giấu icon gốc.** Nhấn giữ icon gốc, chọn **Xóa ứng dụng › Xóa khỏi MH chính**. App vẫn còn trong Thư viện ứng dụng, không mất dữ liệu.
 5. **Gỡ theme.** Vào **Cài đặt chung › VPN & Quản lý thiết bị**, chọn profile **Theme: …** và bấm **Xóa hồ sơ**.
@@ -117,7 +119,7 @@ Thêm app cố định: thêm một dòng vào `TIS.APPS` trong `js/apps.js`.
 { id: 'myapp', name: 'Tên app', scheme: 'myapp://', glyph: 'star', group: 'other', on: true },
 ```
 
-Bạn cũng có thể thêm app ngay trên trang, ở mục **+ Thêm app khác**. Cách này dùng được chữ hoặc emoji làm biểu tượng.
+Bạn cũng có thể thêm app ngay trên trang, ở mục **Tùy chỉnh thêm › + Thêm app khác**. Cách này dùng được chữ hoặc emoji làm biểu tượng.
 
 **Tìm URL scheme của một app:** gõ thử scheme (ví dụ `zalo://`) vào thanh địa chỉ Safari trên iPhone. Nếu Safari hỏi *“Mở trong Zalo?”* thì scheme đúng. Bạn cũng có thể tìm Google với từ khóa “*tên app* URL scheme iOS”.
 
