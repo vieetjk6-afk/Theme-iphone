@@ -50,6 +50,7 @@
           <button type="button" data-v="solid">Một màu</button>
           <button type="button" data-v="ring">Vòng tròn</button>
           <button type="button" data-v="neon">Neon</button>
+          <button type="button" data-v="glass">Kính</button>
         </div>
         <div class="colors">
           <label class="color"><input type="color" id="bg1"><span>Nền 1</span></label>
@@ -77,6 +78,8 @@
           <button type="button" data-v="gradient">Chuyển màu</button>
           <button type="button" data-v="waves">Sóng</button>
           <button type="button" data-v="dots">Chấm bi</button>
+          <button type="button" data-v="mist">Sương mù</button>
+          <button type="button" data-v="ink">Vệt mực</button>
         </div>
         <div class="colors">
           <label class="color"><input type="color" id="c1"><span>Màu 1</span></label>
@@ -85,8 +88,16 @@
           <button type="button" class="btn ghost small" id="shuffle">Đổi họa tiết</button>
         </div>
         <label class="field">
+          <span>Chữ giữa hình nền (bỏ trống nếu không cần)</span>
+          <input type="text" id="wallText" maxlength="20" autocomplete="off" placeholder="VD: MINIMAL">
+        </label>
+        <label class="field">
           <span>Đời máy (để hình nền đúng nét)</span>
           <select id="device"></select>
+        </label>
+        <label class="check">
+          <input type="checkbox" id="widgets">
+          <span>Xem trước có widget Lịch &amp; Đồng hồ (widget thật thêm trong iOS, xem bước 3)</span>
         </label>
       </div>
 
@@ -135,9 +146,20 @@
         <li>Icon tự tạo <b>không hiện số thông báo đỏ</b>. Đây là giới hạn của iOS, áp dụng cho mọi cách đổi icon không cần jailbreak.</li>
         <li>Icon mở app bằng URL scheme. Apple không công bố danh sách đầy đủ và các app có thể đổi scheme. Hãy bấm thử từng icon.
           App nào không mở được thì sửa scheme trong danh sách, hoặc gắn icon cho app đó bằng app Phím tắt.</li>
-        <li>Icon gốc của app vẫn còn. Bạn tự giấu chúng vào Thư viện ứng dụng (bước 4).</li>
+        <li>Icon gốc của app vẫn còn. Bạn tự giấu chúng vào Thư viện ứng dụng (bước 5).</li>
         <li>Không đổi được phông chữ hệ thống, Trung tâm điều khiển hay âm thanh. Những thứ đó cần jailbreak.</li>
       </ul>
+    </div>
+    <div class="note tip">
+      <h2>Mẹo: theme tối giản mà vẫn giữ số thông báo</h2>
+      <p>Muốn kiểu đen trắng như mẫu <b>Sương Đen</b> / <b>Than Chì</b> mà không cần cài bộ icon:</p>
+      <ul>
+        <li>Đặt hình nền của theme (bước 2).</li>
+        <li><b>iOS 26 trở lên:</b> nhấn giữ màn hình chính, chọn <b>Sửa › Tùy chỉnh</b>, chọn <b>Trong suốt</b> (bản tiếng Anh: <i>Clear</i>), rồi chọn <b>Tối</b>.
+          Mọi icon và widget gốc sẽ thành kính mờ.</li>
+        <li><b>iOS 18:</b> làm như trên nhưng chọn <b>Phủ màu</b> (<i>Tinted</i>), kéo thanh màu về xám để icon thành đen trắng.</li>
+      </ul>
+      <p>Cách này giữ nguyên icon gốc nên vẫn có số thông báo đỏ. Bộ icon tự tạo phù hợp khi bạn muốn biểu tượng và tên app theo ý mình.</p>
     </div>
     <h2>Hướng dẫn cài từng bước</h2>
     <ol class="steps">
@@ -151,7 +173,13 @@
       </li>
       <li>
         <h3>Đặt hình nền</h3>
-        <p>Bấm <b>Lấy hình nền</b>, nhấn giữ ảnh, chọn <b>Lưu vào Ảnh</b>. Sau đó vào <b>Cài đặt › Hình nền › Thêm hình nền mới</b> và chọn ảnh đó.</p>
+        <p>Bấm <b>Lấy hình nền</b>, nhấn giữ ảnh, chọn <b>Lưu vào Ảnh</b>. Sau đó vào <b>Cài đặt › Hình nền › Thêm hình nền mới</b> và chọn ảnh đó.
+          Nếu iOS hỏi, tắt hiệu ứng làm mờ màn hình chính để hình nền hiện rõ.</p>
+      </li>
+      <li>
+        <h3>Thêm widget Lịch, Đồng hồ</h3>
+        <p>Nhấn giữ màn hình chính, chọn <b>Sửa › Thêm tiện ích</b>. Tìm <b>Lịch</b> hoặc <b>Đồng hồ</b>, chọn cỡ vuông nhỏ, rồi bấm <b>Thêm tiện ích</b> và kéo lên hàng đầu.
+          Widget hợp theme tối hơn khi bật <b>Cài đặt › Màn hình &amp; Độ sáng › Tối</b>.</p>
       </li>
       <li>
         <h3>Gắn icon cho app không có đường dẫn (Camera, Máy tính…)</h3>

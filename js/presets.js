@@ -1,11 +1,29 @@
 // Các mẫu theme có sẵn. Muốn tạo mẫu riêng: chép một khối bên dưới, đổi id/tên/màu.
-//   icon.style:      gradient | solid | ring | neon
+//   icon.style:      gradient | solid | ring | neon | glass
 //   icon.scale:      kích thước biểu tượng so với icon (0.3 – 0.75)
 //   icon.stroke:     độ dày nét của biểu tượng dạng nét (1 – 3)
-//   wallpaper.style: blobs | gradient | waves | dots
+//   wallpaper.style: blobs | gradient | waves | dots | mist | ink
+//   wallpaper.text:  dòng chữ nhỏ giữa hình nền (để trống nếu không cần)
+//   widgets:         xem trước có widget Lịch & Đồng hồ
 window.TIS = window.TIS || {};
 
 TIS.PRESETS = [
+  // Ba mẫu tối giản đen trắng.
+  {
+    id: 'blackmist', name: 'Sương Đen', widgets: true,
+    icon: { style: 'glass', bg1: '#7a7a7d', bg2: '#4a4a4d', glyph: '#ffffff', scale: 0.48, stroke: 1.8 },
+    wallpaper: { style: 'mist', c1: '#0d0d0e', c2: '#8e8e91', c3: '#d6d6d8', text: '' },
+  },
+  {
+    id: 'graphite', name: 'Than Chì', widgets: true,
+    icon: { style: 'glass', bg1: '#2e2e30', bg2: '#0e0e0f', glyph: '#f5f5f7', scale: 0.48, stroke: 1.8 },
+    wallpaper: { style: 'mist', c1: '#151516', c2: '#b4b4b7', c3: '#ffffff', text: '' },
+  },
+  {
+    id: 'ink', name: 'Mực Đen', widgets: false,
+    icon: { style: 'glass', bg1: '#3a3a3c', bg2: '#1c1c1e', glyph: '#e8e8ea', scale: 0.46, stroke: 1.8 },
+    wallpaper: { style: 'ink', c1: '#252527', c2: '#0a0a0b', c3: '#6a6a6e', text: 'MINIMAL' },
+  },
   {
     id: 'pastel', name: 'Hồng Pastel',
     icon: { style: 'gradient', bg1: '#ffc8dd', bg2: '#b8a4e3', glyph: '#ffffff', scale: 0.5, stroke: 2 },

@@ -19,6 +19,7 @@
       seed: 7,
       device: '1206x2622',
       hideLabels: false,
+      widgets: !!p.widgets,
       selected: Object.fromEntries(TIS.APPS.map((a) => [a.id, !!a.on])),
       labels: {},
       schemes: {},
@@ -88,14 +89,50 @@
     return el;
   }
 
+  // Widget chỉ để xem trước; widget thật do iOS vẽ (Lịch, Đồng hồ…).
+  const WEEKDAYS = ['CHỦ NHẬT', 'THỨ HAI', 'THỨ BA', 'THỨ TƯ', 'THỨ NĂM', 'THỨ SÁU', 'THỨ BẢY'];
+
+  function widgetTile(kind) {
+    const now = new Date();
+    const el = document.createElement('div');
+    el.className = 'tile wide';
+    const w = document.createElement('div');
+    w.className = `widget ${kind}`;
+    w.style.background = `linear-gradient(180deg, ${state.icon.bg1}, ${state.icon.bg2})`;
+    w.style.color = state.icon.glyph;
+    if (kind === 'cal') {
+      w.innerHTML = `<b>${WEEKDAYS[now.getDay()]}</b><strong>${now.getDate()}</strong><small>Không có sự kiện</small>`;
+    } else {
+      const m = now.getMinutes();
+      const h = (now.getHours() % 12) + m / 60;
+      let ticks = '';
+      for (let i = 0; i < 12; i++) {
+        ticks += `<line x1="50" y1="9" x2="50" y2="${i % 3 ? 13 : 16}" transform="rotate(${i * 30} 50 50)"/>`;
+      }
+      w.innerHTML =
+        `<svg viewBox="0 0 100 100" aria-hidden="true"><g stroke="currentColor" stroke-linecap="round">` +
+        `<circle cx="50" cy="50" r="45" fill="rgba(0,0,0,0.18)" stroke-opacity="0.25" stroke-width="1.5"/>` +
+        `<g stroke-width="2" opacity="0.7">${ticks}</g>` +
+        `<line x1="50" y1="50" x2="50" y2="28" stroke-width="5" transform="rotate(${h * 30} 50 50)"/>` +
+        `<line x1="50" y1="50" x2="50" y2="15" stroke-width="3" transform="rotate(${m * 6} 50 50)"/>` +
+        `</g><circle cx="50" cy="50" r="4" fill="currentColor"/></svg>`;
+    }
+    el.appendChild(w);
+    const label = document.createElement('span');
+    label.textContent = kind === 'cal' ? 'Lịch' : 'Đồng hồ';
+    el.appendChild(label);
+    return el;
+  }
+
   function renderPreview() {
     const [W, H] = state.device.split('x').map(Number);
     $('phone').style.aspectRatio = `${W} / ${H}`;
     $('wallPreview').src = R.svgDataURL(R.wallpaperSVG(state.wallpaper, W, H, state.seed));
     const sel = selectedApps();
     const dock = sel.filter((a) => TIS.DOCK_IDS.includes(a.id)).slice(0, 4);
-    const grid = sel.filter((a) => !dock.includes(a)).slice(0, 24);
-    $('homeGrid').replaceChildren(...grid.map((a) => tile(a, false)));
+    const grid = sel.filter((a) => !dock.includes(a)).slice(0, state.widgets ? 16 : 24);
+    const widgets = state.widgets ? [widgetTile('cal'), widgetTile('clock')] : [];
+    $('homeGrid').replaceChildren(...widgets, ...grid.map((a) => tile(a, false)));
     $('dock').replaceChildren(...dock.map((a) => tile(a, true)));
     $('dock').hidden = dock.length === 0;
 
@@ -132,6 +169,8 @@
     $('strokeOut').textContent = Number(state.icon.stroke).toFixed(1);
     $('hideLabels').checked = state.hideLabels;
     for (const id of ['c1', 'c2', 'c3']) $(id).value = state.wallpaper[id];
+    $('wallText').value = state.wallpaper.text || '';
+    $('widgets').checked = state.widgets;
     $('device').value = state.device;
     $('bg2Wrap').hidden = state.icon.style === 'solid';
     setSeg('iconStyle', state.icon.style);
@@ -162,6 +201,7 @@
         state.preset = p.id;
         state.icon = { ...p.icon };
         state.wallpaper = { ...p.wallpaper };
+        state.widgets = !!p.widgets;
         if (isPresetName) state.name = p.name;
         syncControls();
         update();
@@ -319,6 +359,14 @@
         update();
       });
     }
+    $('wallText').addEventListener('input', (e) => {
+      state.wallpaper.text = e.target.value;
+      update();
+    });
+    $('widgets').addEventListener('change', (e) => {
+      state.widgets = e.target.checked;
+      update();
+    });
     $('hideLabels').addEventListener('change', (e) => {
       state.hideLabels = e.target.checked;
       update();
@@ -460,13 +508,14 @@
     const [W, H] = state.device.split('x').map(Number);
     status('Đang vẽ hình nền…');
     const canvas = await R.rasterize(R.wallpaperSVG(state.wallpaper, W, H, state.seed), W, H);
-    return R.canvasToBlob(canvas);
+    // JPEG chất lượng cao: nhẹ hơn PNG hàng chục lần với nền có hạt nhiễu, mắt thường không thấy khác.
+    return R.canvasToBlob(canvas, 'image/jpeg', 0.92);
   }
 
   async function exportWallpaper() {
     const blob = await wallpaperBlob();
     const url = URL.createObjectURL(blob);
-    const name = `hinh-nen-${fileBase()}.png`;
+    const name = `hinh-nen-${fileBase()}.jpg`;
     status('Hình nền đã sẵn sàng.', 'ok');
     showResult(
       'wall',
@@ -496,7 +545,7 @@
     showResult(
       'icons',
       `<h3>Icon cho Phím tắt</h3>
-       <p>Trên iPhone: <b>nhấn giữ icon › Lưu vào Ảnh</b>, rồi làm theo bước 3 trong hướng dẫn bên dưới.
+       <p>Trên iPhone: <b>nhấn giữ icon › Lưu vào Ảnh</b>, rồi làm theo bước 4 trong hướng dẫn bên dưới.
        Các app có nhãn <span class="tag sc">Phím tắt</span> được xếp lên đầu.</p>
        <div class="icon-gallery">` +
         icons
@@ -515,7 +564,7 @@
     const bytes = async (blob) => new Uint8Array(await blob.arrayBuffer());
     const profile = await profileBlob();
     if (profile) files.push({ name: `${fileBase()}.mobileconfig`, data: await bytes(profile.blob) });
-    files.push({ name: `hinh-nen-${state.device}.png`, data: await bytes(await wallpaperBlob()) });
+    files.push({ name: `hinh-nen-${state.device}.jpg`, data: await bytes(await wallpaperBlob()) });
     for (const x of await iconBlobs()) {
       files.push({ name: `icons/${X.slugify(x.app.label)}-${x.app.id}.png`, data: await bytes(x.blob) });
     }
@@ -531,7 +580,7 @@
       '',
       '1. Gửi file .mobileconfig sang iPhone (AirDrop / Mail), mở bằng Safari hoặc Mail,',
       '   rồi vào Cài đặt > Đã tải về hồ sơ > Cài đặt.',
-      '2. Lưu file hinh-nen-*.png vào Ảnh, đặt làm hình nền trong Cài đặt > Hình nền.',
+      '2. Lưu file hinh-nen-*.jpg vào Ảnh, đặt làm hình nền trong Cài đặt > Hình nền.',
       '3. Thư mục icons/ chứa icon 512px để gắn cho app qua app Phím tắt (Mở ứng dụng > Thêm vào MH chính).',
       '4. Gỡ theme: Cài đặt > Cài đặt chung > VPN & Quản lý thiết bị > chọn profile > Xóa hồ sơ.',
       '',

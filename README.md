@@ -5,6 +5,26 @@ Chạy ngay trên trình duyệt. **Không cần jailbreak, không cần Mac, kh
 
 ![Một số mẫu theme có sẵn](assets/preview.jpg)
 
+## Theme tối giản đen trắng làm sẵn
+
+![Sương Đen, Than Chì, Mực Đen](themes/xem-truoc.jpg)
+
+| Theme | Kiểu | Hình nền (1320×2868, dùng được cho mọi iPhone đời mới) |
+|---|---|---|
+| **Sương Đen** | Icon kính xám sáng, nền chuyển từ đen sang xám | [hinh-nen-suong-den.jpg](themes/hinh-nen-suong-den.jpg) |
+| **Than Chì** | Icon kính đen bóng, nền chuyển từ đen sang xám sáng | [hinh-nen-than-chi.jpg](themes/hinh-nen-than-chi.jpg) |
+| **Mực Đen** | Icon kính đen, nền than chì có vệt mực và chữ MINIMAL | [hinh-nen-muc-den.jpg](themes/hinh-nen-muc-den.jpg) |
+
+Cả ba đều có trong Studio, ở mục **Chọn mẫu**. Chọn mẫu, chỉnh tùy ý, rồi bấm **Cài bộ icon**.
+
+**Mẹo: giữ được số thông báo đỏ.** Không muốn cài bộ icon thì chỉ cần đặt hình nền ở trên, rồi bật chế độ icon có sẵn của iOS:
+
+- **iOS 26 trở lên:** nhấn giữ màn hình chính, chọn **Sửa › Tùy chỉnh › Trong suốt** (bản tiếng Anh: *Clear*), rồi chọn **Tối**.
+- **iOS 18:** làm như trên nhưng chọn **Phủ màu** (*Tinted*), kéo thanh màu về xám.
+- **Widget:** thêm widget **Lịch** và **Đồng hồ** cỡ vuông nhỏ lên hàng đầu (**Sửa › Thêm tiện ích**).
+
+Kết quả gần giống ảnh xem trước mà vẫn giữ icon gốc và số thông báo.
+
 ## Làm theme iPhone được tới đâu?
 
 iOS không cho cài theme kiểu Android. Có hai hướng:
@@ -59,6 +79,7 @@ Lệnh `npm start` sẽ in ra địa chỉ dạng `http://192.168.x.x:8080`. Tr�
 1. **Bộ icon.** Bấm **Cài bộ icon**, rồi chọn **Cho phép** khi Safari hỏi. Vào **Cài đặt**, bấm dòng **Đã tải về hồ sơ** ngay dưới tên Apple ID, rồi chọn **Cài đặt**.
    Không thấy dòng đó thì vào **Cài đặt chung › VPN & Quản lý thiết bị**.
 2. **Hình nền.** Bấm **Lấy hình nền**, nhấn giữ ảnh và chọn **Lưu vào Ảnh**. Sau đó vào **Cài đặt › Hình nền › Thêm hình nền mới**.
+   Muốn có widget Lịch và Đồng hồ như ảnh mẫu: nhấn giữ màn hình chính, chọn **Sửa › Thêm tiện ích**.
 3. **App không có scheme** (nhãn *Phím tắt*). Bấm **Lấy icon cho Phím tắt** và lưu icon vào Ảnh.
    Mở app **Phím tắt**, bấm **+ › Thêm tác vụ › Mở ứng dụng** rồi chọn app. Bấm tên phím tắt và chọn **Thêm vào MH chính**. Bấm vào icon, chọn **Chọn ảnh** và lấy icon vừa lưu.
 4. **Giấu icon gốc.** Nhấn giữ icon gốc, chọn **Xóa ứng dụng › Xóa khỏi MH chính**. App vẫn còn trong Thư viện ứng dụng, không mất dữ liệu.
@@ -85,8 +106,10 @@ Thêm một mẫu theme của riêng bạn: chép một khối trong `js/presets
 },
 ```
 
-- `icon.style` nhận một trong các giá trị: `gradient`, `solid`, `ring`, `neon`.
-- `wallpaper.style` nhận một trong các giá trị: `blobs`, `gradient`, `waves`, `dots`.
+- `icon.style` nhận một trong các giá trị: `gradient`, `solid`, `ring`, `neon`, `glass`.
+- `wallpaper.style` nhận một trong các giá trị: `blobs`, `gradient`, `waves`, `dots`, `mist`, `ink`.
+- `wallpaper.text` là dòng chữ nhỏ giữa hình nền, để trống nếu không cần.
+- `widgets: true` bật widget Lịch và Đồng hồ trong khung xem trước.
 
 Thêm app cố định: thêm một dòng vào `TIS.APPS` trong `js/apps.js`.
 
